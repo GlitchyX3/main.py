@@ -1,9 +1,9 @@
-streamlit
-PyPDF2
-openai
-chromadb
-tiktoken
-langchain
+streamlit==1.18.1
+PyPDF2==3.0.1
+openai==0.27.6
+chromadb==0.3.22
+tiktoken==0.3.1
+langchain==0.0.223
 typing-inspect==0.8.0
 typing_extensions==4.5.0
-pysqlite3-binary
+pysqlite3-binary==0.4.6
