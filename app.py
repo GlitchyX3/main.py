@@ -5,6 +5,7 @@ from langchain.vectorstores import Chroma
 from langchain import OpenAI, VectorDBQA
 from langchain.chains import RetrievalQAWithSourcesChain
 import PyPDF2
+import os
 
 # Import pysqlite3 if sqlite3 is not available
 try:
@@ -34,7 +35,7 @@ st.header("AI (I Think?)")
 st.write("---")
 
 # File uploader
-uploaded_files = st.file_uploader("Upload documents", accept_multiple_files=True, type=["txt", "pdf"])
+uploaded_files = st.file_uploader("Upload documents", accept_multiple_files=True, type=["pdf"])
 st.write("---")
 
 if uploaded_files:
@@ -64,8 +65,7 @@ if uploaded_files:
 
     # Setup retriever and LLM model
     try:
-        retriever = vStore.as_retriever()
-        retriever.search_kwargs = {'k': 2}
+        retriever = vStore.as_retriever(search_kwargs={'k': 2})
     except Exception as e:
         st.error(f"An error occurred while setting up the retriever: {e}")
         st.stop()
