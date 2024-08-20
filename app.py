@@ -7,9 +7,13 @@ from langchain.chains import RetrievalQAWithSourcesChain
 import PyPDF2
 
 # Import pysqlite3 if sqlite3 is not available
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    st.error("Failed to import pysqlite3. Please ensure it is installed.")
+    st.stop()
 
 def read_and_textify(files):
     """Extract text from PDF files and return lists of texts and source identifiers."""
@@ -53,10 +57,10 @@ if uploaded_files:
         st.error(f"An AttributeError occurred during Chroma initialization: {e}")
         st.error("This might be due to a change in the Chroma API or method. Please check the latest Chroma documentation for updates.")
         st.error("Documentation: [Chroma Documentation](https://github.com/trychroma/chromadb)")
-        st.stop()  # Stop further execution if initialization fails
+        st.stop()
     except Exception as e:
         st.error(f"An unexpected error occurred during Chroma initialization: {e}")
-        st.stop()  # Stop further execution if initialization fails
+        st.stop()
 
     # Setup retriever and LLM model
     try:
@@ -64,7 +68,7 @@ if uploaded_files:
         retriever.search_kwargs = {'k': 2}
     except Exception as e:
         st.error(f"An error occurred while setting up the retriever: {e}")
-        st.stop()  # Stop further execution if retriever setup fails
+        st.stop()
 
     model_name = "gpt-3.5-turbo"
     try:
@@ -72,7 +76,7 @@ if uploaded_files:
         model = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
     except Exception as e:
         st.error(f"An error occurred while creating the RetrievalQAWithSourcesChain model: {e}")
-        st.stop()  # Stop further execution if model creation fails
+        st.stop()
 
     st.header("Ask your data")
     user_q = st.text_area("Enter your questions here")
