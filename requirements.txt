@@ -4,4 +4,4 @@ openai==0.27.0
 chromadb==0.3.21
 langchain==0.0.192
 pysqlite3-binary==0.5.3
-pillow==9.5.0  # Add pillow with a stable version
+pillow==9.2.0  # Use a stable version known to work well
